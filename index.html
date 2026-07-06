@@ -1,1 +1,363 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueBear Tone Box on GMT Flute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .keyboard-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .key-button {
+            background-color: #4f46e5; /* indigo-600 */
+            color: white;
+            padding: 1.5rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            min-width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .key-button:hover {
+            background-color: #4338ca; /* indigo-700 */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .key-button:active {
+            background-color: #3730a3; /* indigo-800 */
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .key-button.active {
+            background-color: #f97316; /* orange-500 */
+            transform: scale(1.05);
+            box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+        }
+        .key-label {
+            font-size: 0.875rem; /* text-sm */
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+        .note-info {
+            font-size: 0.75rem; /* text-xs */
+            opacity: 0.7;
+        }
+        .stop-button {
+            background-color: #dc2626; /* red-600 */
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        .stop-button:hover {
+            background-color: #b91c1c; /* red-700 */
+            transform: translateY(-2px);
+        }
+        .stop-button:active {
+            background-color: #991b1b; /* red-800 */
+            transform: translateY(0);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #edf2f7;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f7fafc;
+        }
+        tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">BlueBear Tone Box on GMT Flute</h1>
+        <p class="text-gray-700 mb-6">Play notes using your keyboard (W, E, R, T, Y, U, I).</p>
+
+        
+
+        <div id="keyboard-layout" class="keyboard-container">
+            <!-- Buttons will be rendered here by JavaScript -->
+        </div>
+
+        
+            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Selected Notes & Intervals</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-700">Key</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-700">Frequency (Hz)</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-700">Cents (12-TET)</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-700">Octave Relative Step</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-700">Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">W</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">376</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">?</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">10</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">F#4+30¢</td>
+                            </tr>
+                        
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">E</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">460</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">?</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">12</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">A#4 -25¢</td>
+                            </tr>
+                        
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">R</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">500</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">?</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">2</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">B4 +25¢</td>
+                            </tr>
+                        
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">T</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">560</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">?</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">3</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">C#5 +25¢</td>
+                            </tr>
+                        
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">Y</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">620</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">?</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">5</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">D#5</td>
+                            </tr>
+                        
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">U</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">697</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">?</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">7</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">F5</td>
+                            </tr>
+                        
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">I</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">771</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">?</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">10</td>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">G5 -25¢</td>
+                            </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        
+        
+            
+        
+    </div>
+
+    <script>
+        const notes = [{"frequency":376,"cents":"1000.0","actual12TETStep":58,"octaveRelativeStep":10,"keyboardKey":"w"},{"frequency":460,"cents":"0.0","actual12TETStep":60,"octaveRelativeStep":12,"keyboardKey":"e"},{"frequency":500,"cents":"200.0","actual12TETStep":62,"octaveRelativeStep":2,"keyboardKey":"r"},{"frequency":560,"cents":"300.0","actual12TETStep":63,"octaveRelativeStep":3,"keyboardKey":"t"},{"frequency":620,"cents":"500.0","actual12TETStep":65,"octaveRelativeStep":5,"keyboardKey":"y"},{"frequency":697,"cents":"700.0","actual12TETStep":67,"octaveRelativeStep":7,"keyboardKey":"u"},{"frequency":771,"cents":"1000.0","actual12TETStep":70,"octaveRelativeStep":10,"keyboardKey":"i"}];
+        const activeOscillators = {};
+        const pressedKeys = {};
+        let audioContext = null;
+
+        function getAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume().then(() => {
+                        console.log('AudioContext resumed successfully');
+                    }).catch(e => console.error('Error resuming AudioContext:', e));
+                }
+            }
+            return audioContext;
+        }
+
+        function startFrequency(frequency, key) {
+            const context = getAudioContext();
+
+            // Stop all currently active oscillators to ensure single note playback
+            for (const activeKey in activeOscillators) {
+                stopFrequency(activeKey);
+                const button = document.getElementById('key-' + activeKey);
+                if (button) button.classList.remove('active');
+            }
+
+            const oscillator = context.createOscillator();
+            const gainNode = context.createGain();
+            const highPassFilter = context.createBiquadFilter();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, context.currentTime);
+
+            highPassFilter.type = 'highpass';
+            highPassFilter.frequency.setValueAtTime(800, context.currentTime);
+            highPassFilter.Q.setValueAtTime(1, context.currentTime);
+
+            oscillator.connect(highPassFilter);
+            highPassFilter.connect(gainNode);
+
+            const attackTime = 0.15;
+            const now = context.currentTime;
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.5, now + attackTime);
+
+            gainNode.connect(context.destination);
+            oscillator.start();
+
+            activeOscillators[key] = { oscillator, gainNode, filter: highPassFilter };
+
+            const button = document.getElementById('key-' + key);
+            if (button) button.classList.add('active');
+        }
+
+        function stopFrequency(key) {
+            if (activeOscillators[key]) {
+                const { oscillator, gainNode, filter } = activeOscillators[key];
+                const releaseTime = 0.1;
+                const now = audioContext.currentTime;
+                gainNode.gain.cancelScheduledValues(now);
+                gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + releaseTime);
+
+                oscillator.stop(now + releaseTime);
+
+                oscillator.onended = () => {
+                    oscillator.disconnect();
+                    gainNode.disconnect();
+                    if (filter) filter.disconnect();
+                    delete activeOscillators[key];
+                };
+                const button = document.getElementById('key-' + key);
+                if (button) button.classList.remove('active');
+            }
+        }
+
+        function stopAllSounds() {
+            for (const key in activeOscillators) {
+                stopFrequency(key);
+                pressedKeys[key] = false;
+            }
+        }
+
+        // Render keyboard buttons
+        const keyboardLayout = document.getElementById('keyboard-layout');
+        notes.forEach(note => {
+            const button = document.createElement('button');
+            button.id = 'key-' + note.keyboardKey;
+            button.className = 'key-button';
+            // Construct innerHTML using concatenation to avoid nested template literal issues
+            button.innerHTML = note.keyboardKey.toUpperCase() +
+                               '<span class="note-info">' + note.frequency.toFixed(2) + ' Hz</span>' +
+                               '<span class="note-info">' + note.cents + ' cents</span>' +
+                               '<span class="note-info">Step: ' + note.octaveRelativeStep + '</span>';
+
+            button.addEventListener('mousedown', (e) => {
+                e.preventDefault(); // Prevent text selection on click
+                startFrequency(note.frequency, note.keyboardKey);
+            });
+            button.addEventListener('mouseup', () => stopFrequency(note.keyboardKey));
+            button.addEventListener('mouseleave', () => stopFrequency(note.keyboardKey)); // Stop if mouse leaves button while pressed
+            button.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling on touch
+                startFrequency(note.frequency, note.keyboardKey);
+            }, { passive: false });
+            button.addEventListener('touchend', () => stopFrequency(note.keyboardKey));
+            keyboardLayout.appendChild(button);
+        });
+
+        // Keyboard event listeners for computer keyboard
+        document.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            if (event.code === 'Space') {
+                stopAllSounds();
+                event.preventDefault();
+            } else {
+                const noteToPlay = notes.find(n => n.keyboardKey === key);
+                if (noteToPlay && !pressedKeys[key]) {
+                    pressedKeys[key] = true;
+                    startFrequency(noteToPlay.frequency, key);
+                }
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            const key = event.key.toLowerCase();
+            if (event.code !== 'Space') {
+                if (pressedKeys[key]) {
+                    stopFrequency(key);
+                    pressedKeys[key] = false;
+                }
+            }
+        });
+
+        // Attach stopAllSounds to the dedicated button
+        document.getElementById('stopAllSoundsButton').addEventListener('click', stopAllSounds);
+    </script>
+<iframe 
+    src="https://edsnavbar.ruidoso.pictures" 
+    width="100%" 
+    height="200px" 
+    frameborder="0" 
+    scrolling="no" 
+    title="Navigation Bar">
+</iframe>
+  
+</body>
+</html>
+        
